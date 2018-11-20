@@ -1,8 +1,13 @@
 `timescale 1ns / 1ps
+
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
+
+// Company: Spamson
+
+// Engineer: Andrew Swanson
+
 // 
+
 // Create Date: 11/18/2018 12:32:54 AM
 // Design Name: 
 // Module Name: audio_engine_tb
@@ -10,17 +15,32 @@
 // Target Devices: 
 // Tool Versions: 
 // Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
+// // Dependencies: 
+// // Revision:
 // Revision 0.01 - File Created
 // Additional Comments:
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
+module audio_engine_tb();
 
-module audio_engine_tb(
+reg is_dead;
+reg jump;
+reg CLK100MHZ;
+wire audio;
 
-    );
+audio_engine MUT(CLK100MHZ, jump,is_dead,audio);
+
+always
+#1 CLK100MHZ = ~CLK100MHZ;
+
+initial
+    begin
+    CLK100MHZ = 0;  
+    #100
+    jump = 1;
+    #500
+    isdead = 1;
+    end
+
 endmodule
