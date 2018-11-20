@@ -23,13 +23,15 @@
 
 module audio_engine(input CLK100MHZ, input jump, input isdead, output reg audio_out, output reg power);
 
-reg audio;
+reg audio; //The internal audio waveform
+
+//All three counters are compared to each other to generate the waveforms
 reg [23:0]counter;
+reg [23:0] high_counter;
+reg [23:0] low_counter;
 reg low_pitch;
 reg high_pitch;
 reg [3:0]mod_counter;
-reg [23:0] high_counter;
-reg [23:0] low_counter;
 
 always@(CLK100MHZ) //Modifies mod_counter and audio_out
     begin
