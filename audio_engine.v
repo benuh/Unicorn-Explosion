@@ -34,7 +34,7 @@ reg audio; //The internal audio waveform
 	reg [3:0]mod_counter;		//the counter uses for the PWM driver
 
 	always@(CLK100MHZ) //To better interface with the onboard PWM driver, 
-		           //the output signal is modulated through with a consistient clock pul
+		           //the output signal is modulated through with a consistient clock pulse
     begin
 	    if(mod_counter == 0)//At the start of each cycle, the audio stream is brought down to zero
         begin
@@ -55,34 +55,34 @@ reg audio; //The internal audio waveform
 	always@(posedge CLK100MHZ) //The primary block of the audio generator, which compares the various counters to produce the output tones
 begin
 power = 1;
-	if(isdead) //When the player looses, a falling tone is played
+	if(isdead) //When the player loses, a falling tone is played
 	begin
-	if(counter > low_counter)
-		begin
-		low_pitch <= ~low_pitch;//Whenever the counter resets, the square wave is flipped
-		low_counter <= low_counter + 8'd128; //This line increases the period of the low_counter, decreasing the pitch
-		counter <= 0; //And then resets the counter
+		if(counter > low_counter)
+			begin
+			low_pitch <= ~low_pitch;//Whenever the counter resets, the square wave is flipped
+			low_counter <= low_counter + 8'd128; //This line increases the period of the low_counter, decreasing the pitch
+			counter <= 0; //And then resets the counter
+			end
+		else
+			counter = counter + 1;//Otherwise, just increment the counter
 		end
-	else
-		counter = counter + 1;//Otherwise, just increment the counter
-	end
 	else if(jump)//If the player jumps, a rising tone is played
-	begin
-	if(counter > high_counter)
 		begin
-		high_pitch <= ~high_pitch; //Every time the counter reaches its target, the audio stream is flipped
-		high_counter <= high_counter - 8'd128; //and the target of the counter decreases, increasing the pitch
-		counter <= 0; //and reset the counter
+		if(counter > high_counter)
+			begin
+			high_pitch <= ~high_pitch; //Every time the counter reaches its target, the audio stream is flipped
+			high_counter <= high_counter - 8'd128; //and the target of the counter decreases, increasing the pitch
+			counter <= 0; //and reset the counter
+			end
+   		else
+     		counter = counter + 1;
+	end
+	else
+		begin
+		high_counter = 100000; //If nothing is happening, reset both pitches
+		low_counter = 200000;
+		counter = counter + 1; //And increment the counter
 		end
-    else
-        counter = counter + 1;
-	end
-else
-	begin
-	high_counter = 100000; //If nothing is happening, reset both pitches
-	low_counter = 200000;
-	counter = counter + 1; //And increment the counter
-	end
 
 end
 
