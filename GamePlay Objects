@@ -64,41 +64,41 @@ module score(in, out, CLK);
 endmodule
 
 
+// Rest 7-Seg Displays
+module desocderRest(obstacle, out);
+    input [1:0]obstacle; //Input from Physics Engine for rest 7-seg
+    output reg [2:0] out; //Indicator of the rest 7-seg shape
+
+    always@(obstacle)
+    begin
+    if(obstacle[1]) //obstacle[1] shows status if obstacle Down exists
+        out = 3'b001; //Obstacle Down
+    else if(obstacle[0]) //obstacle[0] shows status if obstacle Up exists
+        out = 3'b010; //Obstacle Up
+    else
+        out = 3'b110; //Empty
+    end
+endmodule
+
+
 // First 7-Seg Display
-module decoderFirst (jump, obstacleUp, obstacleDown, out, CLK);
-    input jump, obstacleUp, obstacleDown; //Input from Physics Engine for first 7-seg
+module decoderFirst (jump, obstacle, out, CLK);
+    input jump;
+    input [1:0]obstacle; //Input from Physics Engine for first 7-seg
     input CLK;
     output reg [2:0] out; //Indicator of the first 7-seg shape
     
     always@(posedge CLK)
     begin
-    if(jump==0 & obstacleUp==0 & obstacleDown==0)
+    if(jump==0 & obstacle[0]==0 & obstacle[1]==0)
         out = 3'b000; //Unicorn Down
-    else if (jump==1 & obstacleUp==0 & obstacleDown==0)
+    else if (jump==1 & obstacle[0]==0 & obstacle[1]==0)
         out = 3'b011; //Unicorn Up
-    else if(jump==0 & obstacleUp==1 & obstacleDown==0)
+    else if(jump==0 & obstacle[0]==1 & obstacle[1]==0)
         out = 3'b101; //ObstacleUp w/ Unicorn Down
-    else if(jump==1 & obstacleUp==0 & obstacleDown==1)
+    else if(jump==1 & obstacle[0]==0 & obstacle[1]==1)
         out = 3'b100; //ObstacleDown w/ Unicorn Up
     else
         out = 3'b111; //Dead
-    end
-endmodule
-
-
-// Rest 7-Seg Displays
-module desocderRest(obstacleUp, obstacleDown, out, CLK);
-    input obstacleUp, obstacleDown; //Input from Physics Engine for rest 7-seg
-    input CLK;
-    output reg [2:0] out; //Indicator of the rest 7-seg shape
-
-    always@(posedge CLK)
-    begin
-    if(obstacleDown)
-        out = 3'b001; //Obstacle Down
-    else if(obstacleUp)
-        out = 3'b010; //Obstacle Up
-    else
-        out = 3'b110; //Empty
     end
 endmodule
