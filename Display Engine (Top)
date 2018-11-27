@@ -20,17 +20,16 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 // Main Display Engine (Top Module)
-module display_engine(in, jump, obstacle, out);
-input in;
+module display_engine(jump, obstacle, AN, S);
 input jump;
 input [15:0] obstacle ;
-output reg out;
+output [15:0] AN;
+output [15:0] S;
 
 reg out_first;
-reg out_first_display;
+reg [63:0] out_display;
 reg [7:1]out_rest;
-reg [7:1]out_rest_display;
-    
+
 decoderFirst first_7seg(jump, obstacle[15:14], out_first);
 decoderRest rest1_7seg(obstacle[13:12], out_rest[1]);
 decoderRest rest2_7seg(obstacle[11:10], out_rest[2]);
@@ -41,14 +40,14 @@ decoderRest rest6_7seg(obstacle[3:2], out_rest[6]);
 decoderRest rest7_7seg(obstacle[1:0], out_rest[7]);
 
 
-DP first_7seg_Display (.in(out_first), .out(out_first_display));
-DP rest1_7seg_Display (.in(out_rest[1]), .out(out_rest_display[1]));
-DP rest2_7seg_Display (.in(out_rest[2]), .out(out_rest_display[2]));
-DP rest3_7seg_Display (.in(out_rest[3]), .out(out_rest_display[3]));
-DP rest4_7seg_Display (.in(out_rest[4]), .out(out_rest_display[4]));
-DP rest5_7seg_Display (.in(out_rest[5]), .out(out_rest_display[5]));
-DP rest6_7seg_Display (.in(out_rest[6]), .out(out_rest_display[6]));
-DP rest7_7seg_Display (.in(out_rest[7]), .out(out_rest_display[7]));
+DP first_7seg_Display (.in(out_first), .out(out_display[63:56]));
+DP rest1_7seg_Display (.in(out_rest[1]), .out(out_display[55:48]));
+DP rest2_7seg_Display (.in(out_rest[2]), .out(out_display[47:40]));
+DP rest3_7seg_Display (.in(out_rest[3]), .out(out_display[39:32]));
+DP rest4_7seg_Display (.in(out_rest[4]), .out(out_display[31:24]));
+DP rest5_7seg_Display (.in(out_rest[5]), .out(out_display[23:16]));
+DP rest6_7seg_Display (.in(out_rest[6]), .out(out_display[15:8]));
+DP rest7_7seg_Display (.in(out_rest[7]), .out(out_display[7:0]));
 
 
 endmodule
