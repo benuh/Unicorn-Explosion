@@ -105,40 +105,40 @@ module Map_Gen(
                  begin
                 case(difficulty)
                     0:if(seed_seg <= 3)
-                        begin
-                            preload <= 16'b00;
-                            size <= 1;                         
-                        end
-                        else if(seed_seg <= 5)
-                        begin
-                            preload <= 16'b0000;
-                            size <= 2;
-                        end
-                        else if(seed_seg <= 7)
-                        begin
-                            preload <= 16'b000000;
-                            size <= 3;
-                        end
-                        else
-                        begin
-                            preload <= 8'b00000100;
-                            size <= 4;
-                        end                    
+                      begin
+                          preload <= 16'b00;
+                          size <= 1;                         
+                      end
+                      else if(seed_seg <= 5)
+                      begin
+                          preload <= 16'b0000;
+                          size <= 2;
+                      end
+                      else if(seed_seg <= 7)
+                      begin
+                          preload <= 16'b000000;
+                          size <= 3;
+                      end
+                      else
+                      begin
+                          preload <= 8'b00000100;
+                          size <= 4;
+                      end                    
                     1:if(seed_seg <= 3)
-                    begin
-                        preload <= 16'b00;
-                        size <= 1;                         
-                    end
-                    else if(seed_seg <= 5)
-                    begin
-                        preload <= 16'b0000;
-                        size <= 2;
-                    end
-                    else if(seed_seg <= 7)
-                    begin
-                        preload <= 16'b000000;
-                        size <= 3;
-                    end
+                      begin
+                          preload <= 16'b00;
+                          size <= 1;                         
+                      end
+                      else if(seed_seg <= 5)
+                      begin
+                          preload <= 16'b0000;
+                          size <= 2;
+                      end
+                      else if(seed_seg <= 7)
+                      begin
+                          preload <= 16'b000000;
+                          size <= 3;
+                      end
                       else if(seed_seg <= 11)
                       begin
                             preload <= 16'b00001000;
@@ -150,65 +150,65 @@ module Map_Gen(
                             size <= 4;
                       end
                     2:if(seed_seg <= 2)
-                                          begin
-                                              preload <= 16'b00;
-                                              size <= 1;                         
-                                          end
-                                          else if(seed_seg <= 4)
-                                          begin
-                                              preload <= 16'b0000;
-                                              size <= 2;
-                                          end
-                                          else if(seed_seg <= 6)
-                                          begin
-                                              preload <= 16'b000000;
-                                              size <= 3;
-                                          end
-                                          else if(seed_seg <= 9)
-                                          begin
-                                              preload <= 16'b00001000;
-                                              size <= 4;
-                                          end  
-                                          else if(seed_seg <=11)
-                                          begin
-                                              preload <= 16'b0000010100;
-                                              size <=5;
-                                          end
-                                          else
-                                          begin
-                                              preload <= 16'b00000100;
-                                              size <= 4;
-                                          end
+                      begin
+                            preload <= 16'b00;
+                            size <= 1;                         
+                      end
+                      else if(seed_seg <= 4)
+                      begin
+                            preload <= 16'b0000;
+                            size <= 2;
+                      end
+                      else if(seed_seg <= 6)
+                      begin
+                            preload <= 16'b000000;
+                            size <= 3;
+                      end
+                      else if(seed_seg <= 9)
+                      begin
+                            preload <= 16'b00001000;
+                            size <= 4;
+                      end  
+                      else if(seed_seg <=11)
+                      begin
+                            preload <= 16'b0000010100;
+                            size <=5;
+                      end
+                      else
+                      begin
+                            preload <= 16'b00000100;
+                            size <= 4;
+                      end
                     3:if(seed_seg <= 1)
-                                                                                    begin
-                                                                                        preload <= 16'b00;
-                                                                                        size <= 1;                         
-                                                                                    end
-                                                                                    else if(seed_seg <= 2)
-                                                                                    begin
-                                                                                        preload <= 16'b0000;
-                                                                                        size <= 2;
-                                                                                    end
-                                                                                    else if(seed_seg <= 4)
-                                                                                    begin
-                                                                                        preload <= 16'b000000;
-                                                                                        size <= 3;
-                                                                                    end
-                                                                                    else if(seed_seg <= 7)
-                                                                                    begin
-                                                                                        preload <= 16'b00001000;
-                                                                                        size <= 4;
-                                                                                    end  
-                                                                                    else if(seed_seg <= 10)
-                                                                                    begin
-                                                                                        preload <= 16'b0000010100;
-                                                                                        size <=5;
-                                                                                    end
-                                                                                    else
-                                                                                    begin
-                                                                                        preload <= 16'b00000100;
-                                                                                        size <= 4;
-                                                                                    end
+                      begin
+                          preload <= 16'b00;
+                          size <= 1;                         
+                      end
+                      else if(seed_seg <= 2)
+                      begin
+                          preload <= 16'b0000;
+                          size <= 2;
+                      end
+                      else if(seed_seg <= 4)
+                      begin
+                          preload <= 16'b000000;
+                          size <= 3;
+                      end
+                      else if(seed_seg <= 7)
+                      begin
+                          preload <= 16'b00001000;
+                          size <= 4;
+                      end  
+                      else if(seed_seg <= 10)
+                      begin
+                          preload <= 16'b0000010100;
+                          size <=5;
+                      end
+                      else
+                      begin
+                          preload <= 16'b00000100;
+                          size <= 4;
+                      end
                     default: 
                     begin
                     preload <= 8'b00000100;  
@@ -246,4 +246,36 @@ module Map_Gen(
     assign led = seed[15:0]; 
     
     
+endmodule
+
+
+
+
+
+module debouncer(
+    input clk, //this is a 50MHz clock provided on FPGA pin PIN_Y2
+    input PB,  //this is the input to be debounced
+    output reg PB_state  //this is the debounced switch
+);
+/*This module debounces the pushbutton PB.
+ *It can be added to your project files and called as is:
+ *DO NOT EDIT THIS MODULE
+ */
+
+// Synchronize the switch input to the clock
+reg PB_sync_0;
+always @(posedge clk) PB_sync_0 <= PB; 
+reg PB_sync_1;
+always @(posedge clk) PB_sync_1 <= PB_sync_0;
+
+// Debounce the switch
+reg [15:0] PB_cnt;
+always @(posedge clk)
+if(PB_state==PB_sync_1)
+    PB_cnt <= 0;
+else
+begin
+    PB_cnt <= PB_cnt + 1'b1;  
+    if(PB_cnt == 16'hffff) PB_state <= ~PB_state;  
+end
 endmodule
