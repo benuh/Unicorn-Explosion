@@ -104,8 +104,8 @@ module top(
     
     audio_engine m1(CLK100MHZ, jump, isdead, audio);
     physics_engine m2(clk_div,start,map,jump,isdead,score,isjump);
-    map_gen(clk_div,CLK100MHZ,start,isjump,difficulty,map);
-    display_engine m3(map,AN,S);
-    score_engine m4(clk_div,score_inc,difficulty,score,start);
+    map_gen m3(clk_div,CLK100MHZ,start,isjump,difficulty,map);
+    display_engine m4(jump,map,AN,S);
+    score_engine m5(clk_div,score_inc,difficulty,score,start);
     
 endmodule
