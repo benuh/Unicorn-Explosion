@@ -1,0 +1,53 @@
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 11/27/2018 10:22:44 AM
+// Design Name: 
+// Module Name: Display_Engine
+// Project Name: Display Engine
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+// Main Display Engine (Top Module)
+module Display_Engine(in, jump, obstacleUp, obstacleDown, , out, CLK);
+input in, CLK;
+input jump, obstacleUp, obstacleDown;
+output reg out;
+
+reg out_first;
+reg out_first_display;
+reg [7:1]out_rest;
+reg [7:1]out_rest_display;
+    
+decoderFirst first_7seg(jump, obstacleUp, obstacleDown, out_first, CLK);
+decoderRest rest1_7seg(obstacleUp, obstacleDown, out_rest[1], CLK);
+decoderRest rest2_7seg(obstacleUp, obstacleDown, out_rest[2], CLK);
+decoderRest rest3_7seg(obstacleUp, obstacleDown, out_rest[3], CLK);
+decoderRest rest4_7seg(obstacleUp, obstacleDown, out_rest[4], CLK);
+decoderRest rest5_7seg(obstacleUp, obstacleDown, out_rest[5], CLK);
+decoderRest rest6_7seg(obstacleUp, obstacleDown, out_rest[6], CLK);
+decoderRest rest7_7seg(obstacleUp, obstacleDown, out_rest[7], CLK);
+
+
+DP first_7seg_Display (.in(out_first), .out(out_first_display), .CLK(CLK));
+DP rest1_7seg_Display (.in(out_rest[1]), .out(out_rest_display[1]), .CLK(CLK));
+DP rest2_7seg_Display (.in(out_rest[2]), .out(out_rest_display[2]), .CLK(CLK));
+DP rest3_7seg_Display (.in(out_rest[3]), .out(out_rest_display[3]), .CLK(CLK));
+DP rest4_7seg_Display (.in(out_rest[4]), .out(out_rest_display[4]), .CLK(CLK));
+DP rest5_7seg_Display (.in(out_rest[5]), .out(out_rest_display[5]), .CLK(CLK));
+DP rest6_7seg_Display (.in(out_rest[6]), .out(out_rest_display[6]), .CLK(CLK));
+DP rest7_7seg_Display (.in(out_rest[7]), .out(out_rest_display[7]), .CLK(CLK));
+
+
+endmodule
