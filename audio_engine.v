@@ -21,7 +21,7 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module audio_engine(input CLK100MHZ, input jump, input isdead, output reg audio_out, output reg power);
+module audio_engine(input CLK100MHZ, input jump, input isdead, output reg audio_out, input istesting);
 
 reg audio; //The internal audio waveform
 
@@ -54,13 +54,12 @@ reg audio; //The internal audio waveform
 
 	always@(posedge CLK100MHZ) //The primary block of the audio generator, which compares the various counters to produce the output tones
 begin
-power = 1;
 	if(isdead) //When the player loses, a falling tone is played
 	begin
 		if(counter > low_counter)
 			begin
 			low_pitch <= ~low_pitch;//Whenever the counter resets, the square wave is flipped
-			low_counter <= low_counter + 8'd128; //This line increases the period of the low_counter, decreasing the pitch
+			low_counter <= low_counter + 8'd128*(~istesting) + 1; //This line increases the period of the low_counter, decreasing the pitch
 			counter <= 0; //And then resets the counter
 			end
 		else
@@ -71,12 +70,18 @@ power = 1;
 		if(counter > high_counter)
 			begin
 			high_pitch <= ~high_pitch; //Every time the counter reaches its target, the audio stream is flipped
-			high_counter <= high_counter - 8'd128; //and the target of the counter decreases, increasing the pitch
+			high_counter <= high_counter - 8'd128*(~istesting) -1; //and the target of the counter decreases, increasing the pitch
 			counter <= 0; //and reset the counter
 			end
    		else
      		counter = counter + 1;
 	end
+	else if (istesting)//To make the file simulatable with vivado's 1000ns limit, the 
+	begin
+		high_counter = 100; //If nothing is happening, reset both pitches
+		low_counter = 200;
+		counter = counter + 1; //And increment the counter
+		end
 	else
 		begin
 		high_counter = 100000; //If nothing is happening, reset both pitches

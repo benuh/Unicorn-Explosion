@@ -19,20 +19,21 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
+//The module that tracks the player's current score.
+//The player is awarded one point for every space they travel, and ten point for each block they successfully jump over
 module score_engine(
     input clock_div,
-    input score_in,
-    input difficulty,
+    input score_in, //score_in is sent from the collision detection when the player jumps over a block
+    input [2:0]difficulty, //To add appeal to playing on higher difficulty levels, the score is multiplied by the difficulty. /
     output reg [31:0]score,
     input start
     );
     
-    always@(posedge clock_div, posedge reset)    
+    always@(start, posedge clock_div)    
     begin
     if(~start)
-        score = 0;
-    if(score_in)
+        score = 0; //The score resets to zero on reset
+    if(score_in) //The difficulty must be added by one because it starts at zero, and multiplying the score by zero would not add extra fun :P
         score = score + ((difficulty + 1)*10);
     else
         score = score + ((difficulty + 1)*1);

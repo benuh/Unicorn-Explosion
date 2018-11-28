@@ -29,18 +29,20 @@ reg jump;
 reg CLK100MHZ;
 wire audio;
 
-audio_engine MUT(CLK100MHZ, jump,is_dead,audio);
+audio_engine MUT(CLK100MHZ, jump,is_dead,audio,1);
 
 always
 #1 CLK100MHZ = ~CLK100MHZ;
 
 initial
     begin
-    CLK100MHZ = 0;  
+    CLK100MHZ = 0; //Intialize the clock,
+    jump = 0; //Jump
+    isdead = 0  //and lost settings
     #100
-    jump = 1;
-    #500
-    isdead = 1;
+    jump = 1; //Jump at 100ns
+    #200
+    isdead = 1;//Die at 300ns
     end
 
 endmodule
