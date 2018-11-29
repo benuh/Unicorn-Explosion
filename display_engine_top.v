@@ -20,11 +20,11 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 // Main Display Engine (Top Module)
-module display_engine(jump, obstacle, AN, S);
-input jump;
+module display_engine(jump, obstacle, AN, S, CLK);
+input jump, CLK;
 input [15:0] obstacle ;
-output [15:0] AN;
-output [15:0] S;
+output [7:0] AN;
+output [7:0] S;
 
 reg out_first;
 reg [63:0] out_display;
@@ -49,5 +49,7 @@ DP rest5_7seg_Display (.in(out_rest[5]), .out(out_display[23:16]));
 DP rest6_7seg_Display (.in(out_rest[6]), .out(out_display[15:8]));
 DP rest7_7seg_Display (.in(out_rest[7]), .out(out_display[7:0]));
 
+
+Display_Counter DP1 (CLK,numberin,[7:0]AN,[7:0]S);
 
 endmodule
