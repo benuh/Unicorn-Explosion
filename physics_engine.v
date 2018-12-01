@@ -26,9 +26,7 @@ module physics_engine(
     input [15:0] map_tiles, //MSBs are player position
     input jump,
     output is_dead,
-    output score,
-    
-    );
+    output score);
     
     always@(posedge speed)
     case(map_tiles[15:14])

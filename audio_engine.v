@@ -59,7 +59,7 @@ begin
 		if(counter > low_counter)
 			begin
 			low_pitch <= ~low_pitch;//Whenever the counter resets, the square wave is flipped
-			low_counter <= low_counter + 8'd128*(~istesting) + 1; //This line increases the period of the low_counter, decreasing the pitch
+			low_counter <= low_counter + (8'd128 + 1); //This line increases the period of the low_counter, decreasing the pitch
 			counter <= 0; //And then resets the counter
 			end
 		else
@@ -70,7 +70,7 @@ begin
 		if(counter > high_counter)
 			begin
 			high_pitch <= ~high_pitch; //Every time the counter reaches its target, the audio stream is flipped
-			high_counter <= high_counter - 8'd128*(~istesting) -1; //and the target of the counter decreases, increasing the pitch
+			high_counter <= high_counter - (8'd128+ 1); //and the target of the counter decreases, increasing the pitch
 			counter <= 0; //and reset the counter
 			end
    		else

@@ -38,11 +38,11 @@ initial
     begin
     CLK100MHZ = 0; //Intialize the clock,
     jump = 0; //Jump
-    isdead = 0  //and lost settings
+    is_dead = 0;  //and lost settings
     #100
     jump = 1; //Jump at 100ns
     #200
-    isdead = 1;//Die at 300ns
+    is_dead = 1;//Die at 300ns
     end
 
 endmodule

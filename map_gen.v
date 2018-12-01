@@ -25,7 +25,7 @@ module map_gen(
     input clk_sys , start , jump , rst,
     input [1:0] difficulty,
     output reg [15:0] map
-    ,output [15:0] led
+    //,output [15:0] led
     );
     //reg clkdiv;
     reg en, ed_start,ed_jump;

@@ -1,4 +1,4 @@
-module score_engine_tb()
+module score_engine_tb();
 
 reg clock_div;
 reg score_in;
@@ -27,10 +27,12 @@ score_in = 0; //then wait a few more frams
 #2 
 start = 0; //reset the score
 #5
-$finish //end
+$finish; //end
 end
 
 always
 begin
-#1 clock_div = ~clockdiv; //Use 1GHz Clock for demonstration
+#1 clock_div = ~clock_div; //Use 1GHz Clock for demonstration
 end
+
+endmodule

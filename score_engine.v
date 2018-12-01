@@ -24,12 +24,15 @@
 module score_engine(
     input clock_div,
     input score_in, //score_in is sent from the collision detection when the player jumps over a block
-    input [2:0]difficulty, //To add appeal to playing on higher difficulty levels, the score is multiplied by the difficulty. /
+    input [1:0]difficulty, //To add appeal to playing on higher difficulty levels, the score is multiplied by the difficulty. /
     output reg [31:0]score,
-    input start
+    input start,
+    input isdead
     );
     
-    always@(start, posedge clock_div)    
+    always@(posedge clock_div)    
+    begin
+    if(~isdead)
     begin
     if(~start)
         score = 0; //The score resets to zero on reset
@@ -37,6 +40,7 @@ module score_engine(
         score = score + ((difficulty + 1)*10);
     else
         score = score + ((difficulty + 1)*1);
+    end
     end
     
 endmodule
