@@ -22,13 +22,12 @@
 
 module map_gen(
     input clk_div,
-    input clk_sys , start , jump , rst,
+    input clk_sys , en , jump , rst,
     input [1:0] difficulty,
     output reg [15:0] map
-    //,output [15:0] led
+    //,output [15:0] led//for testing on the fpga
     );
-    //reg clkdiv;
-    reg en, ed_start,ed_jump;
+    reg ed_jump;
     reg [1:0] next;
     reg [9:0] preload;
     reg [2:0] size, place;
@@ -36,14 +35,18 @@ module map_gen(
     reg [1:0] seed_place;
     reg [15:0] counter, seed;
     
-    initial//for test bench, set everything to 0
+    initial//set everything to 0
     begin
-        en = 0;
         counter = 0;
         seed = 0;
         map = 0;
         size = 0;
         place = 0;
+        ed_jump = 0;
+        next = 0;
+        preload = 0;
+        seed_seg = 0;
+        seed_place = 0;
     end
      
     always @ (posedge clk_sys or negedge rst)
@@ -52,30 +55,21 @@ module map_gen(
             counter  <= 16'd0;
         end else
             counter <= counter + 1; //counter used to make a "random" seed
+        end
         
-    end
-    debouncer deb_start(clk_sys,start,start_1);
     debouncer deb_jump(clk_sys,jump, jump_1);
-    always @ (posedge clk_sys or negedge rst)
+    
+    always @ (posedge clk_sys or negedge rst)//This sets the seed to whatever value the counter is when the jump button is pressed
     begin
         if(rst)
         begin
             seed <= 0;
-            en <= 0;
-        end
-        else if (start_1)
-        begin
-            if(ed_start == 0)
-            begin
-                seed <= counter;
-                en <= ~en;
-                ed_start <= 1'b1;
-            end
-                //seed_place <= 4'b0000;
         end
         else if (jump_1)
         begin   
-            if(ed_jump == 0)        
+            if(ed_jump == 0)//we only want jump to activate once when it is pressed.
+            //This allows it to be activated on the first clock cycle it is pressed, and it cannot activate again until there is a clock cycle that
+            //the button is not pressed.        
             begin    
                 seed <= counter;    
                 ed_jump <= 1'b1;
@@ -83,7 +77,6 @@ module map_gen(
         end 
         else
         begin
-            ed_start <= 1'b0;
             ed_jump <= 1'b0;
         end
         
@@ -101,25 +94,25 @@ module map_gen(
     always @ (posedge clk_div)
     begin
         if(en)
-        begin
-            
+        begin          
             if(size <= place)
             begin
-            case(seed_place)
+            case(seed_place)//determines which part of the seed to use based on seed_place
+            //note: we are not using the seed like an actual seed, we are using it as a random 4 bit number
                  0: seed_seg <= seed[3:0];
                  1: seed_seg <= seed[7:4];
                  2: seed_seg <= seed[11:8];
                  3: seed_seg <= seed[15:12];
-                 /*4: seed_seg <= seed[19:16];
-                 5: seed_seg <= seed[23:20];
-                 6: seed_seg <= seed[27:24];
-                 7: seed_seg <= seed[31:28];*/
                  default: seed_seg <= 15;
                  endcase                 
                  seed_place <= seed_place + 1;               
-                 if(map[0] || map[2] || map[4] || map[6] || map[8] || map[10] || map[12] || map[14])
+                 if(map[0] || map[2] || map[4] || map[6] || map[8] || map[10] || map[12] || map[14])/*we want to make sure there is some 
+                 block on the map that will make the player jump, otherwise we could be stuck in a loop of all empty spaces and/or top boxes 
+                 that do not incentivise the player to jump, and in this case the seed will not renew and will continue to create the same anti-jumping map. 
+                 if there is no such block, we will make the preload a jumping block              
+                 */
                  begin
-                case(difficulty)
+                 case(difficulty)//The case determines which set of possible outputs we can get and how likely we are to get them (higher difficulty = more blocks)
                     0:if(seed_seg <= 3)
                       begin
                           preload <= 16'b00;
@@ -239,7 +232,7 @@ module map_gen(
                 end
                 place <= 0;
             end
-            case(place)
+            case(place)//next will become the next preload portion based on what place is at
                 0:next <= preload[1:0];
                 1:next <= preload[3:2];
                 2:next <= preload[5:4];
@@ -249,23 +242,23 @@ module map_gen(
             endcase
             place <= place + 1;
             
-            map <= {map[13:12],map[11:10],map[9:8],map[7:6],map[5:4],map[3:2],map[1:0],next};
+            map <= {map[13:12],map[11:10],map[9:8],map[7:6],map[5:4],map[3:2],map[1:0],next};//shifts map to the left, with the next portion being entered on the right
         end
         else
         begin
-            map <= 0;
+            map <= 0;//when our game is not enabled, then the map is empty, also gives the player a few seconds to get ready for inputs
         end
     end//end of always
     
     
-    assign led = seed[15:0]; 
+    //assign led = seed[15:0]; //for testing on fpga
     
     
 endmodule
 
 
 
-
+//This debouncer is not created by me
 //Debouncer source: https://www.eecs.umich.edu/courses/eecs270/270lab/270_docs/debounce.html
 module debouncer(
     input clk, //this is a 50MHz clock provided on FPGA pin PIN_Y2
