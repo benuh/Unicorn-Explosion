@@ -28,10 +28,11 @@ module top(
     input [3:0]difficulty_in, //The game's difficulty, which causes a more difficult map to be generated, and multiplies the score
     output [7:0]Anodes, //The output to the 8 anodes of the 7 segment displays
     output [7:0]Cathodes, //The output to the 8 shared cathodes of the 7 segment displays
-    output audio //The output to the board's audio amplifier
+    output audio, //The output to the board's audio amplifier
+    output power //needed for higher audio level
     );
     
-    
+    assign power = 1;
     reg jump; //The debounced version of the jump 
     reg start; //The register that tracks the start and stop
     reg [1:0] difficulty; //The current difficulty
