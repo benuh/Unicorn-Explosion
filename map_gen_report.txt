@@ -1,0 +1,19 @@
+=Purpose 
+
+For the game to work, we needed some function that creates the various obstacles for the player. One thing I could have done was just make a large binary number and have that represent our map of obstacles, but that would not only be extremely tedious to actually type into the computer, it would also keep outputting the exact same map if they played multiple times, which could become boring for the player.
+
+=Function
+
+We use a 16 bit register as a counter randomly choose which output will be on the map. We decided that we wanted 3 different types of outputs for each section of the map: empty, bottom block, and top block. This means we need 2 bits to represent each spot on the map. There are 8 segmented displays on the FPGA, so we need 16 bits to represent the map. 
+
+=Implementation
+
+To break down the Always block that starts on line 94, every time the positive edge of the divided clock occurs, we shift the map to the left and add the next section to the right 2 bits of the map. The majority of the block is spent figuring out what that next map section is supposed to be. Basically, the next part of the map is whichever part of the preload we have not put into the map yet, and when there is not any preload left, the portion of the seed the program is currently on is what determines what the next preload is. 
+
+==Problems
+
+I initially had with this design was that it had to be fair. For example, if there were a bottom block followed by a top block on the next display, then the player would lose whether or not they jumped. This drove me to make it so the seed decides between a number of different modules that all include spaces and a block, which ensures there are enough spaces between blocks so the game does not feel too unfair. I got the idea from a game called Spelunky, which is a game where the caves explored are randomly generated in a similar way, where each portion of the map is chosen between several different possible blocks which guarantees the game is fair and no impossible levels are created. In addition, there was another challenge occurred during loops, where no jumping button blocks has created by the seed. In event of the problem, player has no reason to jump, and the jump input is the only way the seed would change. To fix this. Therefore, I had the program check to see if a bottom block on the map before it has determined a preload. If there is not a bottom block, the preload becomes a bottom block, which guarantees the player will jump and the seed will change. 
+
+
+
+
