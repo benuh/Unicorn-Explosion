@@ -1,0 +1,15 @@
+=Purpose:
+
+The score engine is meant to count the output from the Physic engine as player starts playing the game. At the end of the game, score_engine will pass the register score array to the display engine in order to display the final score of the player for the round.
+
+=Implementation
+
+==Inputs&Output
+
+Score_Engine shares the same clock as the entire system, therefore, once any changes of the game happen, the score will act correspondingly. It operates base on the outputs of the Physics_Engine, which is called score_in. In addition, the Difficulty array is taken to evaluate the score for each positive score_in input, the higher difficulties input holds, the higher score of the player receives. In order to operate the score engine, start signal has to maintain positive.
+Once the game is terminated, the engine will deposit the final score and output a 32-bit array to the display engine that displays the final score of the player.
+
+==Loops (always)
+
+The main logic will only run once clock hits its positive edge. If the player is still winning, the counter will operate base on the difficulty level and number of block that the user has passed. 
+ 
